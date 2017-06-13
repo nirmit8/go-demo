@@ -101,6 +101,12 @@ pipeline {
   //the post section allows us to greatly reduce the need for try/catch blocks
   //with Scripted Pipeline we would have had to put a try catch around the entire script
   post {
+    success {
+      slackSend(color: "good", message: "${env.JOB_NAME} completed successfully, details at ${env.RUN_DISPLAY_URL}")
+    }
+    failure {
+      slackSend(color: "danger", message: "${env.JOB_NAME} failed, details at ${env.RUN_DISPLAY_URL}")
+    }
     always {
       sh "docker-compose -f docker-compose-test-local.yml down"
     }
